@@ -11,7 +11,7 @@ typedef struct {
 
 startmap **mapread(FILE* fp, int n);
 void mapprint(int n, startmap **game);
-void solve(int n, startmap **game, int k);
+void solve(int *solve, int n, startmap **game, int k);
 
 int main(int argc, const char * argv[]) {
     
@@ -35,12 +35,40 @@ int main(int argc, const char * argv[]) {
     game=mapread(fp, n);
     fclose(fp);
     int data[9]={1,2,3,4,5,6,7,8,9};
+    solve(data, n, game, 0);
     
     return 0;
 }
 
-void solve(int n, startmap **game, int k) {
+void solve(int *solve, int n, startmap **game, int k) {
+    int i, j, k;
     
+    if(pos>=n*n)
+    {
+        mapprint(n, game);
+        return 1;
+    }
+    
+    i=pos/dim;
+    j=pos%dim;
+}
+
+int disp (int pos,int *val,int *sol,int *mark, int n, int k,int count) {
+    int i;
+    if (pos >= k) {
+        for (i=0; i<k; i++) printf("%d ", sol[i]); printf("\n");
+        return count+1; }
+    for (i=0; i<n; i++)
+    {
+        if (mark[i] == 0)
+        {
+            mark[i] = 1;
+            sol[pos] = val[i];
+            count = disp(pos+1, val, sol, mark, n, k,count);
+            mark[i] = 0; 
+        }
+    } 
+    return count;
 }
 
 startmap **mapread(FILE* fp, int n) {
