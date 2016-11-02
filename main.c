@@ -4,12 +4,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int **mapread(FILE* fp, int n);
-void mapprint(int n, int **map);
+typedef struct {
+    int map;
+    int lock;
+} startmap;
+
+startmap **mapread(FILE* fp, int n);
+void mapprint(int n, startmap **game);
+void solve(int n, startmap **game, int k);
 
 int main(int argc, const char * argv[]) {
     
-    int **map,n=0;
+    int n=0;
+    startmap **game;
     if (argc<=1)
         return 2;
     
@@ -25,34 +32,42 @@ int main(int argc, const char * argv[]) {
         return 1;
     }
     
-    map=mapread(fp, n);
+    game=mapread(fp, n);
     fclose(fp);
+    int data[9]={1,2,3,4,5,6,7,8,9};
     
-    
-    mapprint(n, map);
     return 0;
 }
 
-int **mapread(FILE* fp, int n) {
+void solve(int n, startmap **game, int k) {
     
-    int i, **map=calloc(0,n*sizeof(int));
-    
-    for(i=0; i<n; i++)
-        map[i]=calloc(0,n*sizeof(int));
-    
-    for(i=0;i<n;i++)
-        for(int j=0;j<n;j++)
-            fscanf(fp, "%d", &map[i][j]);
-    
-    return map;
 }
 
-void mapprint(int n, int **map) {
+startmap **mapread(FILE* fp, int n) {
+    int i;
+    
+    startmap **game=malloc(n*sizeof(startmap *));
+    for(i=0; i<n; i++)
+        game[i]=malloc(n*sizeof(startmap));
+    
+    for(i=0;i<n;i++) {
+        for(int j=0;j<n;j++)
+        {
+            fscanf(fp, "%d", &game[i][j].map);
+            if(game[i][j].map!=0)
+                game[i][j].lock=1;
+        }
+    }
+    
+    return game;
+}
+
+void mapprint(int n, startmap **game) {
     
     for(int i=0;i<n;i++)
     {
         for(int j=0;j<n;j++)
-            printf("%d ", map[i][j]);
+            printf("%d ", game[i][j].map);
         printf("\n");
     }
     return;
